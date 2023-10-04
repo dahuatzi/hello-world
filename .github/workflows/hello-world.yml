@@ -1,0 +1,21 @@
+name: Hello World and PR Details
+
+on: [pull_request]
+
+jobs:
+  print-pr-details:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Hello World
+      run: echo "Hello World"
+
+    - name: PR Details
+      run: |
+        echo "Author: ${{ github.event.pull_request.user.login }}"
+        echo "Last Commit: ${{ github.event.pull_request.head.sha }}"
+        git fetch origin ${GITHUB_REF}
+        changes=$(git log --pretty=format:"%h %s" origin/${GITHUB_REF}..${{ github.event.pull_request.head.sha }})
+        echo "Changes since last commit on default branch:"
+        echo "$changes"
+
