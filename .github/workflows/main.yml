@@ -1,0 +1,26 @@
+name: Print Pull Request Details
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  print_details:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v2
+
+      - name: Imprimir "Hello World"
+        run: echo "Hello World"
+
+      - name: Obtener información del pull request
+        run: |
+          echo "Autor: ${{ github.event.pull_request.user.login }}"
+          echo "Último commit: ${{ github.event.pull_request.head.sha }}"
+          echo "Cambios entre el último commit y la rama predeterminada:"
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git diff --name-status ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}
